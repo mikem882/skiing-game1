@@ -1,0 +1,159 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;">let enjoyment = 50;
+let current = 0;
+let activeCurveball = null;
+
+const scenarios = [
+  { text:"You wake up to blue skies and fresh powder!",
+    choices:[
+      { text:"Get there early", enjoyment:+10, next:1 },
+      { text:"Sleep in", enjoyment:-5, next:1 }
+    ]},
+
+  { text:"First runs are perfect and empty.",
+    choices:[
+      { text:"Hit steep trails", enjoyment:+8, next:2 },
+      { text:"Warm up slowly", enjoyment:+4, next:2 }
+    ]},
+
+  { text:"Crowds start filling the mountain.",
+    choices:[
+      { text:"Stay on busy lifts", enjoyment:-3, next:3 },
+      { text:"Find quiet runs", enjoyment:+5, next:3 }
+    ]},
+
+  { text:"You spot a hidden powder stash.",
+    choices:[
+      { text:"Drop in!", enjoyment:+8, next:4 },
+      { text:"Play it safe", enjoyment:-2, next:4 }
+    ]},
+
+  { text:"Lunch break at the lodge.",
+    choices:[
+      { text:"Quick snack", enjoyment:+2, next:5 },
+      { text:"Big hot meal", enjoyment:+5, next:5 }
+    ]},
+
+  { text:"Back on the mountain!",
+    choices:[
+      { text:"Go hard", enjoyment:+6, next:6 },
+      { text:"Take it easy", enjoyment:+2, next:6 }
+    ]},
+
+  { text:"Weather starts changing.",
+    choices:[
+      { text:"Keep skiing", enjoyment:+3, next:7 },
+      { text:"Take a break", enjoyment:+1, next:7 }
+    ]},
+
+  { text:"Last chair approaching!",
+    choices:[
+      { text:"One more run", enjoyment:+4, next:8 },
+      { text:"Call it a day", enjoyment:-1, next:8 }
+    ]},
+
+  { text:"Final run down the mountain.",
+    choices:[
+      { text:"Send it!", enjoyment:+6, next:9 },
+      { text:"Cruise down", enjoyment:+3, next:9 }
+    ]},
+
+  { text:"Your ski day is over!", end:true }
+];
+
+const curveballs = [
+  { text:"Your ski pole snaps in half!",
+    choices:[
+      { text:"Keep skiing", enjoyment:-5, next:5 },
+      { text:"Get replacement", enjoyment:-2, next:5 }
+    ]},
+  { text:"Chair lifts stop working!",
+    choices:[
+      { text:"Wait it out", enjoyment:-4, next:5 },
+      { text:"Hike uphill", enjoyment:-8, next:5 }
+    ]},
+  { text:"You fall into a freezing river!",
+    choices:[
+      { text:"Warm up inside", enjoyment:-6, next:5 },
+      { text:"Keep skiing soaked", enjoyment:-10, next:5 }
+    ]},
+  { text:"You drop your phone off the lift!",
+    choices:[
+      { text:"Search for it", enjoyment:-5, next:5 },
+      { text:"Accept the loss", enjoyment:-3, next:5 }
+    ]}
+];
+
+function getEnding(score){
+  if(score<=9) return "Your day was mid 😐";
+  if(score<=25) return "Rough day 😬";
+  if(score<=50) return "Decent ski day 🙂";
+  if(score<=75) return "Awesome day 🤩";
+  return "Best ski day ever!! 🏆";
+}
+
+function showScenario(){
+  const story=document.getElementById("story");
+  const choices=document.getElementById("choices");
+  const meter=document.getElementById("meter");
+
+  meter.textContent=`Enjoyment: ${enjoyment}`;
+  choices.innerHTML="";
+  const scene=scenarios[current];
+  story.textContent=scene.text;
+
+  if(scene.end){
+    const result=document.createElement("h2");
+    result.textContent=getEnding(enjoyment);
+    story.appendChild(result);
+
+    const restart=document.createElement("button");
+    restart.textContent="Play Again";
+    restart.onclick=()=>{ enjoyment=50; current=0; activeCurveball=null; showScenario(); };
+    choices.appendChild(restart);
+    return;
+  }
+
+  scene.choices.forEach(choice=>{
+    const btn=document.createElement("button");
+    btn.textContent=choice.text;
+    btn.onclick=()=>{
+      enjoyment+=choice.enjoyment;
+      enjoyment=Math.max(0,Math.min(100,enjoyment));
+
+      if(current===4 && activeCurveball===null){
+        activeCurveball=curveballs[Math.floor(Math.random()*curveballs.length)];
+        showCurveball();
+        return;
+      }
+
+      current=choice.next;
+      showScenario();
+    };
+    choices.appendChild(btn);
+  });
+}
+
+function showCurveball(){
+  const story=document.getElementById("story");
+  const choices=document.getElementById("choices");
+  story.textContent=activeCurveball.text;
+  choices.innerHTML="";
+
+  activeCurveball.choices.forEach(choice=>{
+    const btn=document.createElement("button");
+    btn.textContent=choice.text;
+    btn.onclick=()=>{
+      enjoyment+=choice.enjoyment;
+      current=choice.next;
+      showScenario();
+    };
+    choices.appendChild(btn);
+  });
+}
+
+showScenario();</pre>
+        </body>
+    </html>
