@@ -41,7 +41,7 @@
   <div id="meter"></div>
 
   <script>
-    let enjoyment = 50;
+    let enjoyment = 40;
 
     const story = document.getElementById("story");
     const choices = document.getElementById("choices");
@@ -68,16 +68,16 @@
     function startGame() {
       showScenario("You are at the top of a mountain. What do you do?", [
         {
-          text: "Ski down fast",
+          text: "go down fast",
           action: () => {
-            enjoyment += 10;
+            enjoyment += 30;
             scenario2();
           }
         },
         {
           text: "Go slowly",
           action: () => {
-            enjoyment += 5;
+            enjoyment -=5 ;
             scenario2();
           }
         }
@@ -96,13 +96,29 @@
         {
           text: "Play it safe",
           action: () => {
-            enjoyment += 5;
+            enjoyment -= 10;
             endGame();
           }
         }
       ]);
     }
-
+function senario3() {
+  showScenario("You fall", [
+    {
+      text:"call ski patrol and get towed down",
+      action: () => {
+        enjoyment -= 15;
+        endGame();
+      }
+    },
+    {
+      text: "Push through the pain"
+        action: () => {
+    enjoyment -=5;
+    endGame();
+  }
+}
+]);
     function endGame() {
       showScenario("You reached the bottom of the mountain!", [
         {
